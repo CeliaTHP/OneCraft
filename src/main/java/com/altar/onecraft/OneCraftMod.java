@@ -1,5 +1,6 @@
 package com.altar.onecraft;
 
+import com.altar.utils.ResourceDebug;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.registries.Registries;
@@ -122,6 +123,9 @@ public class OneCraftMod
             // Some client setup code
             LOGGER.info("HELLO FROM CLIENT SETUP");
             LOGGER.info("MINECRAFT NAME >> {}", Minecraft.getInstance().getUser().getName());
+
+            ResourceDebug.checkResource("onecraft", "screens/background.png");
+
         }
     }
 }
