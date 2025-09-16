@@ -1,9 +1,4 @@
-package com.altar.utils;
-
-import net.minecraft.resources.ResourceLocation;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.slf4j.LoggerFactory;
+package com.altar.onecraft.utils;
 
 
 public class ResourceDebug {
