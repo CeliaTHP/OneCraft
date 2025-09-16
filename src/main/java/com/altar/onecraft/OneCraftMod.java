@@ -1,9 +1,12 @@
 package com.altar.onecraft;
 
 import com.altar.onecraft.utils.Config;
+import com.altar.onecraft.utils.PlayerEffect;
 import com.altar.onecraft.utils.ResourceDebug;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
+import net.minecraft.server.TickTask;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.api.distmarker.Dist;
@@ -26,21 +29,20 @@ import java.util.List;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(OneCraftMod.MODID)
-public class OneCraftMod
-{
+public class OneCraftMod {
     // Define mod id in a common place for everything to reference
     //TODO : Change mod ID
     public static final String MODID = "examplemod";
     // Directly reference a slf4j logger
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    public OneCraftMod(FMLJavaModLoadingContext context)
-    {
+    public OneCraftMod(FMLJavaModLoadingContext context) {
         IEventBus modEventBus = context.getModEventBus();
 
         // Register the commonSetup method for modloading
         modEventBus.addListener(this::commonSetup);
         ModItems.ITEMS.register(modEventBus);
+        ModEffects.MOB_EFFECTS.register(modEventBus);
 
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
@@ -52,8 +54,7 @@ public class OneCraftMod
         context.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
     }
 
-    private void commonSetup(final FMLCommonSetupEvent event)
-    {
+    private void commonSetup(final FMLCommonSetupEvent event) {
         // Some common setup code
         LOGGER.info("HELLO FROM COMMON SETUP");
 
@@ -66,8 +67,7 @@ public class OneCraftMod
     }
 
     // Add the example block item to the building blocks tab
-    private void addCreative(BuildCreativeModeTabContentsEvent event)
-    {
+    private void addCreative(BuildCreativeModeTabContentsEvent event) {
         for (RegistryObject<Item> fruit : List.of(
                 ModItems.GOMU_GOMU, ModItems.BOMU_BOMU, ModItems.GORO_GORO, ModItems.GURA_GURA,
                 ModItems.HIE_HIE, ModItems.HITO_HITO, ModItems.HORO_HORO, ModItems.ITO_ITO,
@@ -78,38 +78,49 @@ public class OneCraftMod
             event.accept(fruit.get());
         }
     }
+
     @SubscribeEvent
     public void onPlayerClone(PlayerEvent.Clone event) {
+        // Only run if this clone happened because of death
         if (!event.isWasDeath()) return;
-        // On death, retrieve persistent data
         var oldPlayer = event.getOriginal();
-        var newPlayer = event.getEntity(); //
+        var newPlayer = event.getEntity();
 
-        if (oldPlayer.getPersistentData().contains("fruity")) {
-            newPlayer.getPersistentData().putBoolean("fruity",
-                    oldPlayer.getPersistentData().getBoolean("fruity"));
+        // Copy persistent fruity flag
+        boolean wasFruity = oldPlayer.getPersistentData().getBoolean("fruity");
+        newPlayer.getPersistentData().putBoolean("fruity", wasFruity);
+
+        if (wasFruity) {
+            // Delay the effect application to ensure proper synchronization
+            if (!newPlayer.level().isClientSide) {
+                newPlayer.level().getServer().execute(() -> {
+                    // Add a small delay (1 tick) to ensure the player is fully loaded
+                    newPlayer.level().getServer().tell(new TickTask(1, () -> {
+                        PlayerEffect.makeFruity(newPlayer);
+                    }));
+                });
+            }
         }
     }
+
     // You can use SubscribeEvent and let the Event Bus discover methods to call
     @SubscribeEvent
-    public void onServerStarting(ServerStartingEvent event)
-    {
+    public void onServerStarting(ServerStartingEvent event) {
         // Do something when the server starts
         LOGGER.info("HELLO from server starting");
     }
 
     // You can use EventBusSubscriber to automatically register all static methods in the class annotated with @SubscribeEvent
     @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
-    public static class ClientModEvents
-    {
+    public static class ClientModEvents {
         @SubscribeEvent
-        public static void onClientSetup(FMLClientSetupEvent event)
-        {
+        public static void onClientSetup(FMLClientSetupEvent event) {
             // Some client setup code
             LOGGER.info("HELLO FROM CLIENT SETUP");
             LOGGER.info("MINECRAFT NAME >> {}", Minecraft.getInstance().getUser().getName());
 
             ResourceDebug.checkResource("onecraft", "screens/background.png");
+
 
         }
     }

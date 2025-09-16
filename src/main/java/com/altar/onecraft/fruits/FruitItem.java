@@ -1,5 +1,7 @@
 package com.altar.onecraft.fruits;
 
+import com.altar.onecraft.ModEffects;
+import com.altar.onecraft.utils.PlayerEffect;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.damagesource.DamageSource;
@@ -38,24 +40,12 @@ public class FruitItem extends Item {
                 player.hurt(world.damageSources().genericKill(), Float.MAX_VALUE);
 
                 //Reset fruity state
-                player.getPersistentData().putBoolean("fruity", false);
+                PlayerEffect.removeFruity(player);
 
             } else {
                 player.getPersistentData().putBoolean("fruity", true);
-                // Spawn particle FX around player
-                for (int i = 0; i < 20; i++) {
-                    double offsetX = (world.random.nextDouble() - 0.5);
-                    double offsetY = world.random.nextDouble() + 0.5;
-                    double offsetZ = (world.random.nextDouble() - 0.5);
+                PlayerEffect.makeFruity(player);
 
-                    // ENTITY_EFFECT particle with custom color (blue)
-                    world.addParticle(ParticleTypes.ENTITY_EFFECT,
-                            player.getX() + offsetX,
-                            player.getY() + offsetY,
-                            player.getZ() + offsetZ,
-                            0, 0.1, 1.0 // RGB offset: mostly blue
-                    );
-                }
             }
         }
             return super.finishUsingItem(stack, world, entity);
