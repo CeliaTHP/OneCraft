@@ -9,6 +9,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -77,7 +78,18 @@ public class OneCraftMod
             event.accept(fruit.get());
         }
     }
+    @SubscribeEvent
+    public void onPlayerClone(PlayerEvent.Clone event) {
+        if (!event.isWasDeath()) return;
+        // On death, retrieve persistent data
+        var oldPlayer = event.getOriginal();
+        var newPlayer = event.getEntity(); //
 
+        if (oldPlayer.getPersistentData().contains("fruity")) {
+            newPlayer.getPersistentData().putBoolean("fruity",
+                    oldPlayer.getPersistentData().getBoolean("fruity"));
+        }
+    }
     // You can use SubscribeEvent and let the Event Bus discover methods to call
     @SubscribeEvent
     public void onServerStarting(ServerStartingEvent event)
