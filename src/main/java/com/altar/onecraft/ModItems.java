@@ -2,6 +2,7 @@ package com.altar.onecraft;
 
 import com.altar.onecraft.fruits.*;
 import com.altar.onecraft.fruits.GomuGomuFruit;
+import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -13,6 +14,13 @@ public class ModItems
     //Create Item registerer
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, "onecraft");
 
+    public static final RegistryObject<Item> CREATIVE_TAB_ICON = ITEMS.register("creative_tab_icon",
+            () -> new Item(new Item.Properties()) {
+                @Override
+                public boolean isEnabled(FeatureFlagSet pEnabledFeatures) {
+                    return false;
+                }
+            });
     //Register custom items
     public static final RegistryObject<Item> GOMU_GOMU = ITEMS.register("gomu_gomu", GomuGomuFruit::new);
 

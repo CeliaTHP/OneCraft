@@ -1,6 +1,7 @@
 package com.altar.onecraft;
 
 import com.altar.onecraft.utils.Config;
+import com.altar.onecraft.utils.CreativeTabs;
 import com.altar.onecraft.utils.PlayerEffect;
 import com.altar.onecraft.utils.ResourceDebug;
 import com.mojang.logging.LogUtils;
@@ -43,6 +44,8 @@ public class OneCraftMod {
         modEventBus.addListener(this::commonSetup);
         ModItems.ITEMS.register(modEventBus);
         ModEffects.MOB_EFFECTS.register(modEventBus);
+        CreativeTabs.register(modEventBus);
+
 
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
@@ -66,7 +69,7 @@ public class OneCraftMod {
         Config.items.forEach((item) -> LOGGER.info("ITEM >> {}", item.toString()));
     }
 
-    // Add the example block item to the building blocks tab
+    // Add custom block items to the building blocks tab
     private void addCreative(BuildCreativeModeTabContentsEvent event) {
         for (RegistryObject<Item> fruit : List.of(
                 ModItems.GOMU_GOMU, ModItems.BOMU_BOMU, ModItems.GORO_GORO, ModItems.GURA_GURA,
