@@ -1,16 +1,11 @@
 package com.altar.onecraft;
 
-import com.altar.onecraft.utils.CustomUI;
+import com.altar.onecraft.utils.Config;
 import com.altar.onecraft.utils.ResourceDebug;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.material.MapColor;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
@@ -22,10 +17,11 @@ import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import org.slf4j.Logger;
+
+import java.util.List;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(OneCraftMod.MODID)
@@ -71,8 +67,14 @@ public class OneCraftMod
     // Add the example block item to the building blocks tab
     private void addCreative(BuildCreativeModeTabContentsEvent event)
     {
-        if (event.getTabKey() == CreativeModeTabs.BUILDING_BLOCKS) {
-            event.accept(ModItems.GOMU_GOMU.get());
+        for (RegistryObject<Item> fruit : List.of(
+                ModItems.GOMU_GOMU, ModItems.BOMU_BOMU, ModItems.GORO_GORO, ModItems.GURA_GURA,
+                ModItems.HIE_HIE, ModItems.HITO_HITO, ModItems.HORO_HORO, ModItems.ITO_ITO,
+                ModItems.JIKI_JIKI, ModItems.KAGE_KAGE, ModItems.KILO_KILO, ModItems.MAGU_MAGU,
+                ModItems.MERA_MERA, ModItems.MOKU_MOKU, ModItems.NEKO_NEKO, ModItems.NIKYU_NIKYU,
+                ModItems.OPE_OPE, ModItems.PIKA_PIKA, ModItems.RYU_RYU, ModItems.SUKE_SUKE,
+                ModItems.TORI_TORI, ModItems.YAMI_YAMI, ModItems.ZUSHI_ZUSHI)) {
+            event.accept(fruit.get());
         }
     }
 

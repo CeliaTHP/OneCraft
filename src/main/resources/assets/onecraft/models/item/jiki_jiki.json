@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "onecraft:item/bomu_bomu"
+    "layer0": "onecraft:item/jiki_jiki"
   }
 }
