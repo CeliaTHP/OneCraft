@@ -1,8 +1,8 @@
-#Afficher les fruits dans une catégorie à part
-Si t'as déjà consommé un fruit, le prochain te tue + effets reset
-Si fruit mangé nage impossible
+TRI Dossiers
+Si fruit mangé nage impossible //TOFIX
 Fx PrimePiece
 Custom interactiv GUI
+
 
 Source installation information for modders
 -------------------------------------------
@@ -26,7 +26,7 @@ If you prefer to use Eclipse:
    or run `gradlew eclipse` to generate the project.
 
 If you prefer to use IntelliJ:
-1. Open IDEA, and import project.
+1. Open IDEA, and import project.-+
 2. Select your build.gradle file and have it import.
 3. Run the following command: `./gradlew genIntellijRuns`
 4. Refresh the Gradle Project in IDEA if required.

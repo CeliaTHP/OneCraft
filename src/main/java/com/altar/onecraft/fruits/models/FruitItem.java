@@ -3,7 +3,6 @@ package com.altar.onecraft.fruits.models;
 import com.altar.onecraft.player.PlayerEffect;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.LivingEntity;
-
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
@@ -42,7 +41,7 @@ public class FruitItem extends Item {
 
             }
         }
-            return super.finishUsingItem(stack, world, entity);
+        return super.finishUsingItem(stack, world, entity);
 
     }
 }
