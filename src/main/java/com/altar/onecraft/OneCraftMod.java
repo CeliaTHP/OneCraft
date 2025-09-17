@@ -2,11 +2,14 @@ package com.altar.onecraft;
 
 import com.altar.onecraft.player.PlayerEffect;
 import com.altar.onecraft.ui.CreativeTabs;
+import com.altar.onecraft.ui.DisplayOverlay;
 import com.altar.onecraft.utils.Config;
 import com.altar.onecraft.utils.CustomLogger;
 import com.altar.onecraft.utils.ResourceDebug;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.TickTask;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -14,6 +17,9 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.RenderGuiEvent;
+import net.minecraftforge.client.event.RenderGuiOverlayEvent;
+import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
@@ -150,6 +156,28 @@ public class OneCraftMod {
         // Do something when the server starts
         LOGGER.info("HELLO from server starting");
     }
+
+
+    private static final ResourceLocation PNG_TEXTURE = ResourceLocation.fromNamespaceAndPath("onecraft", "textures/gui/spells_overlay.png");
+
+    @SubscribeEvent
+    public void onRenderGui(RenderGuiEvent.Post event) {
+        CustomLogger.d("UI__","onRenderGUI");
+        ResourceDebug.checkResource("onecraft", "gui/spells_overlay.png");
+
+        GuiGraphics guiGraphics = event.getGuiGraphics();
+
+        //Add spellbar if fruit + paraeter to display corresponding bar
+        DisplayOverlay.renderPngOverlay(guiGraphics, Minecraft.getInstance(), PNG_TEXTURE,
+                5.0f, // X position from left
+                80.0f,   // Y position from top
+                30.0f,
+                20.0f
+        );
+    }
+
+
+
 
     @SubscribeEvent
     public static void onLivingTickAdvanced(LivingEvent.LivingTickEvent event) {
