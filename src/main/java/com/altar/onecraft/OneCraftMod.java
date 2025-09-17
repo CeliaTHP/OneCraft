@@ -1,18 +1,30 @@
 package com.altar.onecraft;
 
 import com.altar.onecraft.utils.Config;
-import com.altar.onecraft.utils.CreativeTabs;
-import com.altar.onecraft.utils.PlayerEffect;
+import com.altar.onecraft.ui.CreativeTabs;
+import com.altar.onecraft.player.PlayerEffect;
+import com.altar.onecraft.utils.CustomLogger;
 import com.altar.onecraft.utils.ResourceDebug;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.TickTask;
-import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
+import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -27,6 +39,7 @@ import net.minecraftforge.registries.RegistryObject;
 import org.slf4j.Logger;
 
 import java.util.List;
+import java.util.UUID;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(OneCraftMod.MODID)
@@ -93,11 +106,11 @@ public class OneCraftMod {
         boolean wasFruity = oldPlayer.getPersistentData().getBoolean("fruity");
         newPlayer.getPersistentData().putBoolean("fruity", wasFruity);
 
+        // Reset fruity effect if player died being fruity
         if (wasFruity) {
-            // Delay the effect application to ensure proper synchronization
+            // Delay the effect so UI loads correctly
             if (!newPlayer.level().isClientSide) {
                 newPlayer.level().getServer().execute(() -> {
-                    // Add a small delay (1 tick) to ensure the player is fully loaded
                     newPlayer.level().getServer().tell(new TickTask(1, () -> {
                         PlayerEffect.makeFruity(newPlayer);
                     }));
@@ -106,11 +119,104 @@ public class OneCraftMod {
         }
     }
 
+    @SubscribeEvent
+    public void onTickPlayerTick(TickEvent.PlayerTickEvent event) {
+        Player player = event.player;
+        UUID FRUITY_SWIM_MODIFIER_ID = UUID.fromString("550e8400-e29b-41d4-a716-446655440001");
+
+
+        boolean isFruity = player.getPersistentData().getBoolean("fruity");
+
+        if (isFruity && player.isInWater()) {
+
+            player.setDeltaMovement(0, -0.8, 0);  // Only sink, no horizontal movement at all
+
+            player.setSwimming(false);
+
+            AttributeInstance swimSpeedAttr = player.getAttribute(ForgeMod.SWIM_SPEED.get());
+            if (swimSpeedAttr != null) {
+                swimSpeedAttr.removeModifier(FRUITY_SWIM_MODIFIER_ID);
+
+                swimSpeedAttr.addTransientModifier(new AttributeModifier(FRUITY_SWIM_MODIFIER_ID, "fruity_sink", -5.0, AttributeModifier.Operation.ADDITION));
+
+            }
+
+            // Optional: Add drowning damage every 2 seconds
+            if (player.tickCount % 40 == 0) {
+                player.hurt(player.damageSources().drown(), 2.0F);
+            }
+        }
+
+    }
+
+
     // You can use SubscribeEvent and let the Event Bus discover methods to call
     @SubscribeEvent
     public void onServerStarting(ServerStartingEvent event) {
         // Do something when the server starts
         LOGGER.info("HELLO from server starting");
+    }
+
+    @SubscribeEvent
+    public static void onLivingTickAdvanced(LivingEvent.LivingTickEvent event) {
+        CustomLogger.d("FRUITY_CHECK", "player null = ");
+
+        if (!(event.getEntity() instanceof Player player)) return;
+
+        boolean isFruity = player.getPersistentData().getBoolean("fruity");
+        CustomLogger.d("FRUITY_CHECK", "fruity = " + isFruity);
+        CustomLogger.d("FRUITY_CHECK", "onWater = " + player.isInWater());
+        CustomLogger.d("FRUITY_CHECK", "isSwimming = " + player.isSwimming());
+
+
+/*
+        //Check if walks on water block //script to launch /attribute
+        if (isFruity && player.isInWater()) {
+
+            // Strong sinking force - more aggressive than your original
+            Vec3 deltaMovement = player.getDeltaMovement();
+            player.setDeltaMovement(
+                    deltaMovement.x * 0.1,  // Almost stop horizontal movement
+                    Math.min(deltaMovement.y, -0.3),  // Stronger downward force
+                    deltaMovement.z * 0.1
+            );
+
+            // Disable swimming animation and abilities
+            player.setSwimming(false);
+
+            // Prevent any upward movement from swimming attempts
+            if (deltaMovement.y > -0.1) {
+                player.addDeltaMovement(new Vec3(0, -0.2, 0));
+            }
+
+            // Add bubble particles (client-side effect)
+            if (player.level().isClientSide && player.getRandom().nextFloat() < 0.15F) {
+                player.level().addParticle(
+                        ParticleTypes.BUBBLE,
+                        player.getX() + (player.getRandom().nextDouble() - 0.5) * 0.5,
+                        player.getY() + player.getRandom().nextDouble() * 0.5,
+                        player.getZ() + (player.getRandom().nextDouble() - 0.5) * 0.5,
+                        0, 0.1, 0
+                );
+            }
+
+            // Optional: Add drowning damage every 2 seconds
+            if (player.tickCount % 40 == 0) {
+                player.hurt(player.damageSources().drown(), 1.0F);
+            }
+
+            // Optional: Send message to player
+            if (player instanceof ServerPlayer serverPlayer && player.tickCount % 60 == 0) {
+                serverPlayer.displayClientMessage(
+                        Component.literal("§cYou're too fruity to swim! You're sinking!"),
+                        true
+                );
+            }
+        }
+
+ */
+
+
     }
 
     // You can use EventBusSubscriber to automatically register all static methods in the class annotated with @SubscribeEvent

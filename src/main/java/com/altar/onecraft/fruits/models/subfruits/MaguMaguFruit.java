@@ -1,4 +1,6 @@
-package com.altar.onecraft.fruits;
+package com.altar.onecraft.fruits.models.subfruits;
+
+import com.altar.onecraft.fruits.models.FruitItem;
 
 public class MaguMaguFruit extends FruitItem {
     public MaguMaguFruit() {

@@ -1,4 +1,4 @@
-package com.altar.onecraft.utils;
+package com.altar.onecraft.player;
 
 import com.altar.onecraft.ModEffects;
 import net.minecraft.world.effect.MobEffectInstance;

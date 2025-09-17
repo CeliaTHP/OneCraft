@@ -1,4 +1,4 @@
-package com.altar.onecraft.utils;
+package com.altar.onecraft.ui;
 
 
 import com.altar.onecraft.ModItems;

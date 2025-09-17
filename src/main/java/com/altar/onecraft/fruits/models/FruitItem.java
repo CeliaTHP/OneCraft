@@ -1,13 +1,7 @@
-package com.altar.onecraft.fruits;
+package com.altar.onecraft.fruits.models;
 
-import com.altar.onecraft.ModEffects;
-import com.altar.onecraft.utils.PlayerEffect;
-import net.minecraft.core.particles.ParticleTypes;
+import com.altar.onecraft.player.PlayerEffect;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageSources;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 
 import net.minecraft.world.entity.player.Player;
@@ -28,7 +22,6 @@ public class FruitItem extends Item {
                         .build()
                 )
         );
-        ;
     }
 
     @Override
@@ -40,6 +33,7 @@ public class FruitItem extends Item {
                 player.hurt(world.damageSources().genericKill(), Float.MAX_VALUE);
 
                 //Reset fruity state
+                //Add parameter to identify the consumed fruit ?
                 PlayerEffect.removeFruity(player);
 
             } else {

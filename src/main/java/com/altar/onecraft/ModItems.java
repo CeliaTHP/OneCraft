@@ -1,7 +1,6 @@
 package com.altar.onecraft;
 
-import com.altar.onecraft.fruits.*;
-import com.altar.onecraft.fruits.GomuGomuFruit;
+import com.altar.onecraft.fruits.models.subfruits.*;
 import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.registries.DeferredRegister;
