@@ -170,10 +170,10 @@ public class OneCraftMod {
 
         //Add spellbar if fruit + paraeter to display corresponding bar
         DisplayOverlay.renderPngOverlay(guiGraphics, Minecraft.getInstance(), PNG_TEXTURE,
-                5.0f, // X position from left
-                80.0f,   // Y position from top
-                30.0f,
-                20.0f
+                01.0f, // X position from left
+                90.0f,   // Y position from top
+                20.0f,
+                10.0f
         );
     }
 
