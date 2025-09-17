@@ -13,10 +13,14 @@ public class PlayerEffect {
 
     //TODO : Class to handle persistent data manipulation
 
-    // Client-side current overlay
     public static ResourceLocation CURRENT_OVERLAY = null;
+    public static boolean SHOW_OVERLAY = true;
 
-        public static ResourceLocation getFruitOverlay(FruitItem.FruitType fruitType) {
+    public static void toggleOverlay() {
+        SHOW_OVERLAY = !SHOW_OVERLAY;
+    }
+
+    public static ResourceLocation getFruitOverlay(FruitItem.FruitType fruitType) {
             return switch (fruitType) {
                 case BOMU_BOMU -> ResourceLocation.fromNamespaceAndPath("onecraft", "textures/gui/overlay_spells_bomu_bomu.png");
                 case GOMU_GOMU -> ResourceLocation.fromNamespaceAndPath("onecraft", "textures/gui/overlay_spells_background.png");

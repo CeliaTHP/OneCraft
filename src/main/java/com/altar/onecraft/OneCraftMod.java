@@ -6,10 +6,12 @@ import com.altar.onecraft.ui.CreativeTabs;
 import com.altar.onecraft.ui.DisplayOverlay;
 import com.altar.onecraft.utils.Config;
 import com.altar.onecraft.utils.CustomLogger;
+import com.altar.onecraft.utils.KeyBindings;
 import com.altar.onecraft.utils.ResourceDebug;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.TickTask;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -17,6 +19,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.InputEvent;
+import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.client.event.RenderGuiEvent;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.common.MinecraftForge;
@@ -159,15 +163,23 @@ public class OneCraftMod {
         LOGGER.info("HELLO from server starting");
     }
 
+    @SubscribeEvent
+    public void onRegisterKeyMappings(RegisterKeyMappingsEvent event) {
+        KeyBindings.register(event);
+    }
+
 
     @SubscribeEvent
     public void onRenderGui(RenderGuiEvent.Post event) {
-        if (PlayerEffect.CURRENT_OVERLAY == null) return;
+        //Disable overlay if no fruit or if fruit overlay key pressed
 
+        if (PlayerEffect.CURRENT_OVERLAY == null || !PlayerEffect.SHOW_OVERLAY) {
+            return;
+        }
 
         GuiGraphics guiGraphics = event.getGuiGraphics();
 
-        //Add spellbar if fruit + paraeter to display corresponding bar
+        //Add spellbar if fruit + parameter to display corresponding bar
         DisplayOverlay.renderPngOverlay(guiGraphics, Minecraft.getInstance(), PlayerEffect.CURRENT_OVERLAY,
                 01.0f, // X position from left
                 90.0f,   // Y position from top

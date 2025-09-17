@@ -23,6 +23,10 @@
   "item.onecraft.yami_yami": "Yami Yami Fruit",
   "item.onecraft.zushi_zushi": "Zushi Zushi Fruit",
   "effect.onecraft.fruity": "Fruité",
-  "creativetab.onecraft.devil_fruits": "Fruits du démon"
+  "creativetab.onecraft.devil_fruits": "Fruits du démon",
+
+  "key.onecraft.fruit_ability": "Compétences de fruit",
+  "key.categories.onecraft": "OneCraft Mod"
+
 
 }
