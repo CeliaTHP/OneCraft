@@ -1,6 +1,3 @@
-TRI Dossiers
-Si fruit mangé nage impossible //TOFIX
-Fx PrimePiece
 Custom interactiv GUI
 
 

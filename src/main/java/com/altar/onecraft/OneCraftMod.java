@@ -10,7 +10,6 @@ import com.altar.onecraft.utils.ResourceDebug;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.TickTask;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -115,7 +114,7 @@ public class OneCraftMod {
             if (!newPlayer.level().isClientSide) {
                 newPlayer.level().getServer().execute(() -> {
                     newPlayer.level().getServer().tell(new TickTask(1, () -> {
-                        PlayerEffect.makeFruity(newPlayer,oldFruit);
+                        PlayerEffect.makeFruity(newPlayer, oldFruit);
                     }));
                 });
             }
@@ -161,23 +160,21 @@ public class OneCraftMod {
     }
 
 
-    private static final ResourceLocation PNG_TEXTURE = ResourceLocation.fromNamespaceAndPath("onecraft", "textures/gui/spells_overlay.png");
-
     @SubscribeEvent
     public void onRenderGui(RenderGuiEvent.Post event) {
+        if (PlayerEffect.CURRENT_OVERLAY == null) return;
+
 
         GuiGraphics guiGraphics = event.getGuiGraphics();
 
         //Add spellbar if fruit + paraeter to display corresponding bar
-        DisplayOverlay.renderPngOverlay(guiGraphics, Minecraft.getInstance(), PNG_TEXTURE,
+        DisplayOverlay.renderPngOverlay(guiGraphics, Minecraft.getInstance(), PlayerEffect.CURRENT_OVERLAY,
                 01.0f, // X position from left
                 90.0f,   // Y position from top
                 20.0f,
                 10.0f
         );
     }
-
-
 
 
     @SubscribeEvent
