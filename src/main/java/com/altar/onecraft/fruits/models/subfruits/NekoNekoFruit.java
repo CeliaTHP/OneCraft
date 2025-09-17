@@ -4,6 +4,6 @@ import com.altar.onecraft.fruits.models.FruitItem;
 
 public class NekoNekoFruit extends FruitItem {
     public NekoNekoFruit() {
-        super(8, 0.8f);
+        super(8, 0.8f, FruitType.NEKO_NEKO);
     }
 }

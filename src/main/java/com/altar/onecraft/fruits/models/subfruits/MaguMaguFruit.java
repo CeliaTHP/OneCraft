@@ -4,6 +4,6 @@ import com.altar.onecraft.fruits.models.FruitItem;
 
 public class MaguMaguFruit extends FruitItem {
     public MaguMaguFruit() {
-        super(8, 0.8f);
+        super(8, 0.8f, FruitType.MAGU_MAGU);
     }
 }

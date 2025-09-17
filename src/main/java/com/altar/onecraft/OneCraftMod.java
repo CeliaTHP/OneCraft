@@ -1,5 +1,6 @@
 package com.altar.onecraft;
 
+import com.altar.onecraft.fruits.models.FruitItem;
 import com.altar.onecraft.player.PlayerEffect;
 import com.altar.onecraft.ui.CreativeTabs;
 import com.altar.onecraft.ui.DisplayOverlay;
@@ -18,8 +19,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderGuiEvent;
-import net.minecraftforge.client.event.RenderGuiOverlayEvent;
-import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
@@ -104,15 +103,19 @@ public class OneCraftMod {
 
         // Copy persistent fruity flag
         boolean wasFruity = oldPlayer.getPersistentData().getBoolean("fruity");
+        String fruitTypeName = oldPlayer.getPersistentData().getString("fruit_type");
+
         newPlayer.getPersistentData().putBoolean("fruity", wasFruity);
 
         // Reset fruity effect if player died being fruity
-        if (wasFruity) {
+        if (wasFruity && fruitTypeName != null && !fruitTypeName.isEmpty()) {
+            FruitItem.FruitType oldFruit = FruitItem.FruitType.valueOf(oldPlayer.getPersistentData().getString("fruit_type"));
+
             // Delay the effect so UI loads correctly
             if (!newPlayer.level().isClientSide) {
                 newPlayer.level().getServer().execute(() -> {
                     newPlayer.level().getServer().tell(new TickTask(1, () -> {
-                        PlayerEffect.makeFruity(newPlayer);
+                        PlayerEffect.makeFruity(newPlayer,oldFruit);
                     }));
                 });
             }
@@ -162,8 +165,6 @@ public class OneCraftMod {
 
     @SubscribeEvent
     public void onRenderGui(RenderGuiEvent.Post event) {
-        CustomLogger.d("UI__","onRenderGUI");
-        ResourceDebug.checkResource("onecraft", "gui/spells_overlay.png");
 
         GuiGraphics guiGraphics = event.getGuiGraphics();
 

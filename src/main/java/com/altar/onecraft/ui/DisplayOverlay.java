@@ -40,7 +40,7 @@ public class DisplayOverlay {
         Optional<Resource> resourceOpt;
 
         resourceOpt = mc.getResourceManager().getResource(texture);
-
+/*
         if (resourceOpt.isEmpty()) {
             CustomLogger.e("DisplayOverlay", "Missing texture: " + texture +
                     " | Expected at: assets/" + texture.getNamespace() + "/textures/" + texture.getPath());
@@ -49,6 +49,8 @@ public class DisplayOverlay {
             CustomLogger.d("DisplayOverlay", "Found texture: " + texture +
                     " | Physical path: assets/" + texture.getNamespace() + "/textures/" + texture.getPath());
         }
+
+ */
 
 
         // Get screen dimensions

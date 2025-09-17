@@ -4,6 +4,6 @@ import com.altar.onecraft.fruits.models.FruitItem;
 
 public class HitoHitoFruit extends FruitItem {
     public HitoHitoFruit() {
-        super(8, 0.8f);
+        super(8, 0.8f, FruitType.HITO_HITO);
     }
 }

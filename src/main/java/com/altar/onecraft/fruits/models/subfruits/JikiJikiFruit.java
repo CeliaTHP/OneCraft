@@ -4,6 +4,6 @@ import com.altar.onecraft.fruits.models.FruitItem;
 
 public class JikiJikiFruit extends FruitItem {
     public JikiJikiFruit() {
-        super(8, 0.8f);
+        super(8, 0.8f, FruitType.JIKI_JIKI);
     }
 }

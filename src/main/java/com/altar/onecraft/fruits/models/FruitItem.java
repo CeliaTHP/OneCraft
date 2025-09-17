@@ -11,7 +11,35 @@ import net.minecraft.world.level.Level;
 
 public class FruitItem extends Item {
 
-    public FruitItem(int nutrition, float saturation) {
+    FruitType fruitType;
+
+    public enum FruitType {
+        BOMU_BOMU,
+        GOMU_GOMU,
+        GORO_GORO,
+        GURA_GURA,
+        HIE_HIE,
+        HITO_HITO,
+        HORO_HORO,
+        ITO_ITO,
+        JIKI_JIKI,
+        KAGE_KAGE,
+        KILO_KILO,
+        MAGU_MAGU,
+        MERA_MERA,
+        MOKU_MOKU,
+        NEKO_NEKO,
+        NIKYU_NIKYU,
+        OPE_OPE,
+        PIKA_PIKA,
+        RYU_RYU,
+        SUKE_SUKE,
+        TORI_TORI,
+        YAMI_YAMI,
+        ZUSHI_ZUSHI;
+    }
+
+    public FruitItem(int nutrition, float saturation, FruitType fruitType) {
         super(new Item.Properties()
                 .stacksTo(64)
                 .food(new FoodProperties.Builder()
@@ -21,6 +49,7 @@ public class FruitItem extends Item {
                         .build()
                 )
         );
+        this.fruitType = fruitType;
     }
 
     @Override
@@ -32,12 +61,10 @@ public class FruitItem extends Item {
                 player.hurt(world.damageSources().genericKill(), Float.MAX_VALUE);
 
                 //Reset fruity state
-                //Add parameter to identify the consumed fruit ?
                 PlayerEffect.removeFruity(player);
 
             } else {
-                player.getPersistentData().putBoolean("fruity", true);
-                PlayerEffect.makeFruity(player);
+                PlayerEffect.makeFruity(player,this.fruitType);
 
             }
         }
