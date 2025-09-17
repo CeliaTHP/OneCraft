@@ -218,7 +218,7 @@ public class OneCraftMod {
                         ParticleTypes.BUBBLE,
                         player.getX() + (player.getRandom().nextDouble() - 0.5) * 0.5,
                         player.getY() + player.getRandom().nextDouble() * 0.5,
-                        player.getZ() + (player.getRandom().nextDouble() - 0.5) * 0.5,
+                        player.getZ() + (player.gtRandom().nextDouble() - 0.5) * 0.5,
                         0, 0.1, 0
                 );
             }
