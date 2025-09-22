@@ -26,6 +26,26 @@ public class ClientKeyHandler {
         if (KeyBindings.SPELL_2_KEY.consumeClick()) {
             PlayerEffect.selectSkillNumber(2);
         }
+        if (KeyBindings.SPELL_3_KEY.consumeClick()) {
+            PlayerEffect.selectSkillNumber(3);
+        }
+        if (KeyBindings.SPELL_4_KEY.consumeClick()) {
+            PlayerEffect.selectSkillNumber(4);
+        }
+        if (KeyBindings.SPELL_5_KEY.consumeClick()) {
+            PlayerEffect.selectSkillNumber(5);
+        }
+        if (KeyBindings.SPELL_6_KEY.consumeClick()) {
+            PlayerEffect.selectSkillNumber(6);
+        }
+        if (KeyBindings.SPELL_7_KEY.consumeClick()) {
+            PlayerEffect.selectSkillNumber(7);
+        }
+
+
+
+
+
 
 
     }

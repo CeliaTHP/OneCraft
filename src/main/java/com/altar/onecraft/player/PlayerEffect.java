@@ -26,10 +26,10 @@ public class PlayerEffect {
     private static float targetCursorX = 0f;
     private static long lastUpdateTime = System.currentTimeMillis();
 
-    // Spell bar configuration (adjust these values based on your GUI layout)
-    private static final float SPELL_BAR_START_X = 0.2f; // Starting X position of first spell
-    private static final float SPELL_BAR_SPACING = 1f; // Distance between each spell slot
-    private static final float CURSOR_ANIMATION_SPEED = 8f; // Higher = faster animation
+    // Cursor configuration
+    private static final float SPELL_BAR_START_X = 0.9f; // Starting X position of first spell
+    private static final float SPELL_BAR_SPACING = 2.6f; // Distance between each spell slot
+    private static final float CURSOR_ANIMATION_SPEED = 8f;
 
     public static void toggleOverlay() {
         Minecraft.getInstance().player.sendSystemMessage(
