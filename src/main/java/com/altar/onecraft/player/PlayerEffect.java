@@ -27,7 +27,7 @@ public class PlayerEffect {
     private static long lastUpdateTime = System.currentTimeMillis();
 
     // Cursor configuration
-    private static final float SPELL_BAR_START_X = 0.9f; // Starting X position of first spell
+    private static final float SPELL_BAR_START_X = 1f; // Starting X position of first spell
     private static final float SPELL_BAR_SPACING = 2.6f; // Distance between each spell slot
     private static final float CURSOR_ANIMATION_SPEED = 8f;
 
@@ -69,7 +69,7 @@ public class PlayerEffect {
     }
 
     public static ResourceLocation getCursorOverlay() {
-        return ResourceLocation.fromNamespaceAndPath("onecraft", "textures/gui/key.png");
+        return ResourceLocation.fromNamespaceAndPath("onecraft", "textures/gui/gui_cursor.png");
     }
 
     // Get current cursor position for rendering
@@ -106,7 +106,7 @@ public class PlayerEffect {
 
     public static ResourceLocation getFruitOverlay(FruitItem.FruitType fruitType) {
             return switch (fruitType) {
-                case BOMU_BOMU -> ResourceLocation.fromNamespaceAndPath("onecraft", "textures/gui/overlay_spells_bomu_bomu.png");
+                case BOMU_BOMU -> ResourceLocation.fromNamespaceAndPath("onecraft", "textures/gui/gui_spells_bomu_bomu.png");
                 case GOMU_GOMU -> ResourceLocation.fromNamespaceAndPath("onecraft", "textures/gui/overlay_spells_background.png");
                 case GORO_GORO -> ResourceLocation.fromNamespaceAndPath("onecraft", "textures/gui/overlay_spells_goro_goro.png");
                 case GURA_GURA -> ResourceLocation.fromNamespaceAndPath("onecraft", "textures/gui/overlay_spells_gura_gura.png");
