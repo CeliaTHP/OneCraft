@@ -181,12 +181,11 @@ public class OneCraftMod {
 
         //Add spellbar if fruit + parameter to display corresponding bar
         DisplayOverlay.renderPngOverlay(guiGraphics, Minecraft.getInstance(), PlayerEffect.CURRENT_OVERLAY,
-                01.0f, // X position from left
-                90.0f,   // Y position from top
-                20.0f,
-                10.0f
+                PlayerEffect.SPELL_BAR_RENDER_X,
+                PlayerEffect.SPELL_BAR_RENDER_Y,
+                PlayerEffect.SPELL_BAR_RENDER_WIDTH,
+                PlayerEffect.SPELL_BAR_RENDER_HEIGHT
         );
-
         // Render the cursor at the calculated position
         if (PlayerEffect.SPELL_CURSOR != null) {
             DisplayOverlay.renderPngOverlay(guiGraphics, Minecraft.getInstance(), PlayerEffect.SPELL_CURSOR,

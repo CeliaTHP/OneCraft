@@ -31,6 +31,12 @@ public class PlayerEffect {
     private static final float SPELL_BAR_SPACING = 2.6f; // Distance between each spell slot
     private static final float CURSOR_ANIMATION_SPEED = 8f;
 
+    public static final float SPELL_BAR_RENDER_X = 1.0f;    // X position where spell bar is rendered
+    public static final float SPELL_BAR_RENDER_Y = 90.0f;   // Y position where spell bar is rendered
+    public static final float SPELL_BAR_RENDER_WIDTH = 20.0f;  // Width of spell bar (from your render call)
+    public static final float SPELL_BAR_RENDER_HEIGHT = 10.0f; // Height of spell bar (from your render call)
+
+
     public static void toggleOverlay() {
         Minecraft.getInstance().player.sendSystemMessage(
                 Component.literal("Toggle Overlay")
