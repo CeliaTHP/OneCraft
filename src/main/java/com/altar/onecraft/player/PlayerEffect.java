@@ -3,7 +3,6 @@ package com.altar.onecraft.player;
 import com.altar.onecraft.ModEffects;
 import com.altar.onecraft.fruits.models.FruitItem;
 import com.altar.onecraft.utils.CustomLogger;
-import com.altar.onecraft.utils.KeyBindings;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -20,18 +19,90 @@ public class PlayerEffect {
 
     public static boolean SHOW_OVERLAY = true;
 
+    // Cursor animation variables
+    private static int currentSpell = 1;
+    private static int targetSpell = 1;
+    private static float currentCursorX = 0f;
+    private static float targetCursorX = 0f;
+    private static long lastUpdateTime = System.currentTimeMillis();
+
+    // Spell bar configuration (adjust these values based on your GUI layout)
+    private static final float SPELL_BAR_START_X = 0.2f; // Starting X position of first spell
+    private static final float SPELL_BAR_SPACING = 1f; // Distance between each spell slot
+    private static final float CURSOR_ANIMATION_SPEED = 8f; // Higher = faster animation
+
     public static void toggleOverlay() {
         Minecraft.getInstance().player.sendSystemMessage(
                 Component.literal("Toggle Overlay")
         );
         SHOW_OVERLAY = !SHOW_OVERLAY;
     }
-    public static void selectSkillNumber(int keyCode) {
-         Minecraft.getInstance().player.sendSystemMessage(
-                    Component.literal("SELECT SKILL n" + keyCode)
-            );
 
+    public static void selectSkillNumber(int spellNumber) {
+        if (spellNumber < 1 || spellNumber > 7) return;
+
+        Minecraft.getInstance().player.sendSystemMessage(
+                Component.literal("SELECT SKILL n" + spellNumber)
+        );
+
+        // Update target spell and cursor position
+        targetSpell = spellNumber;
+        targetCursorX = SPELL_BAR_START_X + (spellNumber - 1) * SPELL_BAR_SPACING;
+
+        SPELL_CURSOR = getCursorOverlay();
     }
+
+    // Call this method in your render tick or client tick event
+    public static void updateCursorAnimation() {
+        long currentTime = System.currentTimeMillis();
+        float deltaTime = (currentTime - lastUpdateTime) / 1000f; // Convert to seconds
+        lastUpdateTime = currentTime;
+
+        // Smooth interpolation towards target position
+        if (Math.abs(targetCursorX - currentCursorX) > 0.5f) {
+            float difference = targetCursorX - currentCursorX;
+            currentCursorX += difference * CURSOR_ANIMATION_SPEED * deltaTime;
+        } else {
+            currentCursorX = targetCursorX;
+            currentSpell = targetSpell;
+        }
+    }
+
+    public static ResourceLocation getCursorOverlay() {
+        return ResourceLocation.fromNamespaceAndPath("onecraft", "textures/gui/key.png");
+    }
+
+    // Get current cursor position for rendering
+    public static float getCurrentCursorX() {
+        return currentCursorX;
+    }
+
+    public static float getCurrentCursorY() {
+        // Return fixed Y position for horizontal spell bar
+        return 90f;
+    }
+
+    // Get current selected spell
+    public static int getCurrentSpell() {
+        return currentSpell;
+    }
+
+    public static int getTargetSpell() {
+        return targetSpell;
+    }
+
+    // Initialize cursor position (call when player gets a fruit ability)
+    public static void initializeCursor() {
+        currentSpell = 1;
+        targetSpell = 1;
+        currentCursorX = SPELL_BAR_START_X;
+        targetCursorX = SPELL_BAR_START_X;
+        lastUpdateTime = System.currentTimeMillis();
+        SPELL_CURSOR = getCursorOverlay();
+
+        System.out.println("Cursor initialized at position: " + currentCursorX);
+    }
+
 
     public static ResourceLocation getFruitOverlay(FruitItem.FruitType fruitType) {
             return switch (fruitType) {
@@ -61,8 +132,6 @@ public class PlayerEffect {
             };
         }
 
-
-
     public static void makeFruity(Player player, FruitItem.FruitType fruitType) {
         CustomLogger.d("MAKE_FRUITY", "fruity = true & fruit type = " + fruitType);
 
@@ -72,6 +141,8 @@ public class PlayerEffect {
         CURRENT_OVERLAY = getFruitOverlay(fruitType);
         SHOW_OVERLAY = true;
 
+        // Initialize cursor when player becomes fruity
+        initializeCursor();
 
         // Determine the effect based on fruitType
         MobEffect effect = switch (fruitType) {
@@ -116,6 +187,7 @@ public class PlayerEffect {
         player.getPersistentData().remove("fruit_type");
 
         CURRENT_OVERLAY = null;
+        SPELL_CURSOR = null;
 
         // Remove all fruit effects
         player.removeEffect(ModEffects.BOMU_BOMU_EFFECT.get());

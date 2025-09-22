@@ -36,22 +36,6 @@ public class DisplayOverlay {
                                         float xPercent, float yPercent, float widthPercent, float heightPercent) {
 
 
-        Optional<Resource> resourceOpt;
-
-        resourceOpt = mc.getResourceManager().getResource(texture);
-/*
-        if (resourceOpt.isEmpty()) {
-            CustomLogger.e("DisplayOverlay", "Missing texture: " + texture +
-                    " | Expected at: assets/" + texture.getNamespace() + "/textures/" + texture.getPath());
-            return;
-        } else {
-            CustomLogger.d("DisplayOverlay", "Found texture: " + texture +
-                    " | Physical path: assets/" + texture.getNamespace() + "/textures/" + texture.getPath());
-        }
-
- */
-
-
         // Get screen dimensions
         int screenWidth = mc.getWindow().getGuiScaledWidth();
         int screenHeight = mc.getWindow().getGuiScaledHeight();

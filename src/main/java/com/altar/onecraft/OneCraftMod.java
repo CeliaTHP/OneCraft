@@ -186,6 +186,17 @@ public class OneCraftMod {
                 20.0f,
                 10.0f
         );
+
+        // Render the cursor at the calculated position
+        if (PlayerEffect.SPELL_CURSOR != null) {
+            DisplayOverlay.renderPngOverlay(guiGraphics, Minecraft.getInstance(), PlayerEffect.SPELL_CURSOR,
+                    PlayerEffect.getCurrentCursorX(), // Use the animated cursor X position
+                    PlayerEffect.getCurrentCursorY(),   // Use the cursor Y position
+                    20.0f,
+                    10.0f
+            );
+        }
+
     }
 
 
