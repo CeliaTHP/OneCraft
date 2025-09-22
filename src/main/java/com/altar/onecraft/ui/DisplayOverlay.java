@@ -14,7 +14,6 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import java.io.IOException;
 import java.util.Optional;
 
-import static com.altar.onecraft.ui.DisplayOverlay.renderPngOverlay;
 
 public class DisplayOverlay {
 

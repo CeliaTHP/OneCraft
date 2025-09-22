@@ -3,6 +3,9 @@ package com.altar.onecraft.player;
 import com.altar.onecraft.ModEffects;
 import com.altar.onecraft.fruits.models.FruitItem;
 import com.altar.onecraft.utils.CustomLogger;
+import com.altar.onecraft.utils.KeyBindings;
+import net.minecraft.client.Minecraft;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -10,14 +13,24 @@ import net.minecraft.world.entity.player.Player;
 
 public class PlayerEffect {
 
-
     //TODO : Class to handle persistent data manipulation
 
     public static ResourceLocation CURRENT_OVERLAY = null;
+    public static ResourceLocation SPELL_CURSOR = null;
+
     public static boolean SHOW_OVERLAY = true;
 
     public static void toggleOverlay() {
+        Minecraft.getInstance().player.sendSystemMessage(
+                Component.literal("Toggle Overlay")
+        );
         SHOW_OVERLAY = !SHOW_OVERLAY;
+    }
+    public static void selectSkillNumber(int keyCode) {
+         Minecraft.getInstance().player.sendSystemMessage(
+                    Component.literal("SELECT SKILL n" + keyCode)
+            );
+
     }
 
     public static ResourceLocation getFruitOverlay(FruitItem.FruitType fruitType) {
@@ -56,8 +69,9 @@ public class PlayerEffect {
         player.getPersistentData().putBoolean("fruity", true);
         player.getPersistentData().putString("fruit_type", fruitType.name());
 
-        getFruitOverlay(fruitType);
         CURRENT_OVERLAY = getFruitOverlay(fruitType);
+        SHOW_OVERLAY = true;
+
 
         // Determine the effect based on fruitType
         MobEffect effect = switch (fruitType) {

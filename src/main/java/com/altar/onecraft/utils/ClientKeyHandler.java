@@ -16,10 +16,17 @@ public class ClientKeyHandler {
         if (Minecraft.getInstance().player == null) return;
 
         if (KeyBindings.FRUIT_ABILITY_KEY.consumeClick()) {
-            Minecraft.getInstance().player.sendSystemMessage(
-                    Component.literal("Fruit ability key pressed!")
-            );
             PlayerEffect.toggleOverlay();
         }
+
+        if (KeyBindings.SPELL_1_KEY.consumeClick()) {
+            PlayerEffect.selectSkillNumber(1);
+        }
+
+        if (KeyBindings.SPELL_2_KEY.consumeClick()) {
+            PlayerEffect.selectSkillNumber(2);
+        }
+
+
     }
 }
